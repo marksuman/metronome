@@ -89,10 +89,20 @@ void quiz_metronome_init(AppContextRef ctx) {
   window_stack_push(window, true /* Animated */);
 }
 
+static void quiz_metronome_deinit(AppContextRef c) {
+   app_sync_deinit(&s_data.sync);
+ }
 
 void pbl_main(void *params) {
   PebbleAppHandlers handlers = {
-    .init_handler = &quiz_metronome_init
+    .init_handler = &quiz_metronome_init,
+    .deinit_handler = &quiz_metronome_deinit,
+    .messaging_info = {
+      .buffer_sizes = {
+        .inbound = 64,
+        .outbound = 16,
+      }
+    }
   };
   app_event_loop(params, &handlers);
 }
